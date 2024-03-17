@@ -1,9 +1,9 @@
-# Embedded-Term project-Run away Alarm
+# run-away-smart-alarm
 C language + IAR Embedded Workbench
 
 
 ## 🖥️ 프로젝트 소개
-STM32F107 보드를 이용하여 만든 도망가는 알람 시계 입니다.
+부산대학교 3학년 2학기 '임베디드시스템설계및실험' 교과 수업 중 STM32F107 보드를 이용하여 만든 도망가는 스마트 알람 시계 입니다.
 <br>
 
 ## 🕰️ 개발 기간
