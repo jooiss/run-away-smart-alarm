@@ -1,0 +1,284 @@
+###############################################################################
+#
+# IAR ANSI C/C++ Compiler V8.22.1.15669/W32 for ARM       22/Dec/2023  07:23:12
+# Copyright 1999-2018 IAR Systems AB.
+#
+#    Cpu mode     =  thumb
+#    Endian       =  little
+#    Source file  =  C:\Users\user\Documents\Term_project\user\moveWheel.c
+#    Command line =  
+#        -f C:\Users\user\AppData\Local\Temp\EW17EC.tmp
+#        (C:\Users\user\Documents\Term_project\user\moveWheel.c -D
+#        USE_STDPERIPH_DRIVER -D STM32F10X_CL -lC
+#        C:\Users\user\Documents\Term_project\Debug\List -o
+#        C:\Users\user\Documents\Term_project\Debug\Obj --no_cse --no_unroll
+#        --no_inline --no_code_motion --no_tbaa --no_clustering --no_scheduling
+#        --debug --endian=little --cpu=Cortex-M3 -e --fpu=None --dlib_config
+#        "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        8.0\arm\INC\c\DLib_Config_Normal.h" -I
+#        C:\Users\user\Documents\Term_project\Libraries\CMSIS\DeviceSupport\ -I
+#        C:\Users\user\Documents\Term_project\Libraries\CMSIS\DeviceSupport\Startup\
+#        -I
+#        C:\Users\user\Documents\Term_project\Libraries\STM32F10x_StdPeriph_Driver_v3.5\inc\
+#        -I
+#        C:\Users\user\Documents\Term_project\Libraries\STM32F10x_StdPeriph_Driver_v3.5\src\
+#        -I C:\Users\user\Documents\Term_project\user\inc\ -I
+#        C:\Users\user\Documents\Term_project\user\ -I
+#        C:\Users\user\Documents\Term_project\Libraries\LCD\ -Ol -I "C:\Program
+#        Files (x86)\IAR Systems\Embedded Workbench
+#        8.0\arm\CMSIS\Core\Include\" -I "C:\Program Files (x86)\IAR
+#        Systems\Embedded Workbench 8.0\arm\CMSIS\DSP\Include\")
+#    Locale       =  C
+#    List file    =  
+#        C:\Users\user\Documents\Term_project\Debug\List\moveWheel.lst
+#    Object file  =  C:\Users\user\Documents\Term_project\Debug\Obj\moveWheel.o
+#
+###############################################################################
+
+C:\Users\user\Documents\Term_project\user\moveWheel.c
+      1          #include <moveWheel.h>
+      2          #include "ultrasonic.h"
+      3          #include "stm32f10x.h"
+      4          #include "stm32f10x_rcc.h"
+      5          #include "stm32f10x_gpio.h"
+      6          
+      7          #define LEFT_HIGH GPIO_Pin_12
+      8          #define LEFT_LOW GPIO_Pin_13
+      9          #define RIGHT_HIGH GPIO_Pin_4
+     10          #define RIGHT_LOW GPIO_Pin_5
+     11          
+     12          
+     13          //@@ PB12, PB13
+     14          //@@2 PA4, PA5
+     15          
+     16          //@@ (RC@@ @@ @@ @@@@ @@@ @ -> @@@@ @@@@@ @@@@@ )
+     17          
+
+   \                                 In section .text, align 2, keep-with-next
+     18          void RCC_Configure_wheel_pin(void)
+     19          {
+   \                     RCC_Configure_wheel_pin: (+1)
+   \   00000000   0xB580             PUSH     {R7,LR}
+     20              RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);
+   \   00000002   0x2101             MOVS     R1,#+1
+   \   00000004   0x2004             MOVS     R0,#+4
+   \   00000006   0x.... 0x....      BL       RCC_APB2PeriphClockCmd
+     21              RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);
+   \   0000000A   0x2101             MOVS     R1,#+1
+   \   0000000C   0x2008             MOVS     R0,#+8
+   \   0000000E   0x.... 0x....      BL       RCC_APB2PeriphClockCmd
+     22          }
+   \   00000012   0xBD01             POP      {R0,PC}          ;; return
+     23          
+
+   \                                 In section .text, align 2, keep-with-next
+     24          void GPIO_Configure_wheel(void) {
+   \                     GPIO_Configure_wheel: (+1)
+   \   00000000   0xB580             PUSH     {R7,LR}
+     25              GPIO_InitTypeDef GPIO_InitStructure;
+     26              GPIO_InitStructure.GPIO_Pin = LEFT_HIGH | LEFT_LOW;
+   \   00000002   0xF44F 0x5040      MOV      R0,#+12288
+   \   00000006   0xF8AD 0x0000      STRH     R0,[SP, #+0]
+     27              GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+   \   0000000A   0x2003             MOVS     R0,#+3
+   \   0000000C   0xF88D 0x0002      STRB     R0,[SP, #+2]
+     28              GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+   \   00000010   0x2010             MOVS     R0,#+16
+   \   00000012   0xF88D 0x0003      STRB     R0,[SP, #+3]
+     29              GPIO_Init(GPIOB, &GPIO_InitStructure);
+   \   00000016   0x4669             MOV      R1,SP
+   \   00000018   0x....             LDR.N    R0,??DataTable6  ;; 0x40010c00
+   \   0000001A   0x.... 0x....      BL       GPIO_Init
+     30              
+     31              GPIO_InitStructure.GPIO_Pin = RIGHT_HIGH | RIGHT_LOW;
+   \   0000001E   0x2030             MOVS     R0,#+48
+   \   00000020   0xF8AD 0x0000      STRH     R0,[SP, #+0]
+     32              GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+   \   00000024   0x2003             MOVS     R0,#+3
+   \   00000026   0xF88D 0x0002      STRB     R0,[SP, #+2]
+     33              GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+   \   0000002A   0x2010             MOVS     R0,#+16
+   \   0000002C   0xF88D 0x0003      STRB     R0,[SP, #+3]
+     34              GPIO_Init(GPIOA, &GPIO_InitStructure);
+   \   00000030   0x4669             MOV      R1,SP
+   \   00000032   0x....             LDR.N    R0,??DataTable6_1  ;; 0x40010800
+   \   00000034   0x.... 0x....      BL       GPIO_Init
+     35          }
+   \   00000038   0xBD01             POP      {R0,PC}          ;; return
+     36          
+
+   \                                 In section .text, align 2, keep-with-next
+     37          void setDirectionToFront(void) {
+   \                     setDirectionToFront: (+1)
+   \   00000000   0xB580             PUSH     {R7,LR}
+     38              GPIO_SetBits(GPIOB, LEFT_HIGH);
+   \   00000002   0xF44F 0x5180      MOV      R1,#+4096
+   \   00000006   0x....             LDR.N    R0,??DataTable6  ;; 0x40010c00
+   \   00000008   0x.... 0x....      BL       GPIO_SetBits
+     39              GPIO_ResetBits(GPIOB, LEFT_LOW);
+   \   0000000C   0xF44F 0x5100      MOV      R1,#+8192
+   \   00000010   0x....             LDR.N    R0,??DataTable6  ;; 0x40010c00
+   \   00000012   0x.... 0x....      BL       GPIO_ResetBits
+     40              GPIO_SetBits(GPIOA, RIGHT_HIGH);
+   \   00000016   0x2110             MOVS     R1,#+16
+   \   00000018   0x....             LDR.N    R0,??DataTable6_1  ;; 0x40010800
+   \   0000001A   0x.... 0x....      BL       GPIO_SetBits
+     41              GPIO_ResetBits(GPIOA, RIGHT_LOW);
+   \   0000001E   0x2120             MOVS     R1,#+32
+   \   00000020   0x....             LDR.N    R0,??DataTable6_1  ;; 0x40010800
+   \   00000022   0x.... 0x....      BL       GPIO_ResetBits
+     42          } 
+   \   00000026   0xBD01             POP      {R0,PC}          ;; return
+     43          
+
+   \                                 In section .text, align 2, keep-with-next
+     44          void setDirectionToBack(void) {
+   \                     setDirectionToBack: (+1)
+   \   00000000   0xB580             PUSH     {R7,LR}
+     45              GPIO_ResetBits(GPIOB, LEFT_HIGH);
+   \   00000002   0xF44F 0x5180      MOV      R1,#+4096
+   \   00000006   0x....             LDR.N    R0,??DataTable6  ;; 0x40010c00
+   \   00000008   0x.... 0x....      BL       GPIO_ResetBits
+     46              GPIO_SetBits(GPIOB, LEFT_LOW);
+   \   0000000C   0xF44F 0x5100      MOV      R1,#+8192
+   \   00000010   0x....             LDR.N    R0,??DataTable6  ;; 0x40010c00
+   \   00000012   0x.... 0x....      BL       GPIO_SetBits
+     47              GPIO_ResetBits(GPIOA, RIGHT_HIGH);
+   \   00000016   0x2110             MOVS     R1,#+16
+   \   00000018   0x....             LDR.N    R0,??DataTable6_1  ;; 0x40010800
+   \   0000001A   0x.... 0x....      BL       GPIO_ResetBits
+     48              GPIO_SetBits(GPIOA, RIGHT_LOW);
+   \   0000001E   0x2120             MOVS     R1,#+32
+   \   00000020   0x....             LDR.N    R0,??DataTable6_1  ;; 0x40010800
+   \   00000022   0x.... 0x....      BL       GPIO_SetBits
+     49          }
+   \   00000026   0xBD01             POP      {R0,PC}          ;; return
+     50          
+
+   \                                 In section .text, align 2, keep-with-next
+     51          void turnToLeft(void) {
+   \                     turnToLeft: (+1)
+   \   00000000   0xB580             PUSH     {R7,LR}
+     52              GPIO_SetBits(GPIOB, LEFT_HIGH);
+   \   00000002   0xF44F 0x5180      MOV      R1,#+4096
+   \   00000006   0x....             LDR.N    R0,??DataTable6  ;; 0x40010c00
+   \   00000008   0x.... 0x....      BL       GPIO_SetBits
+     53              GPIO_ResetBits(GPIOB, LEFT_LOW);
+   \   0000000C   0xF44F 0x5100      MOV      R1,#+8192
+   \   00000010   0x....             LDR.N    R0,??DataTable6  ;; 0x40010c00
+   \   00000012   0x.... 0x....      BL       GPIO_ResetBits
+     54              GPIO_ResetBits(GPIOA, RIGHT_HIGH);
+   \   00000016   0x2110             MOVS     R1,#+16
+   \   00000018   0x....             LDR.N    R0,??DataTable6_1  ;; 0x40010800
+   \   0000001A   0x.... 0x....      BL       GPIO_ResetBits
+     55              GPIO_ResetBits(GPIOA, RIGHT_LOW);
+   \   0000001E   0x2120             MOVS     R1,#+32
+   \   00000020   0x....             LDR.N    R0,??DataTable6_1  ;; 0x40010800
+   \   00000022   0x.... 0x....      BL       GPIO_ResetBits
+     56          }
+   \   00000026   0xBD01             POP      {R0,PC}          ;; return
+     57          
+
+   \                                 In section .text, align 2, keep-with-next
+     58          void turnToRight(void) {
+   \                     turnToRight: (+1)
+   \   00000000   0xB580             PUSH     {R7,LR}
+     59              GPIO_ResetBits(GPIOB, LEFT_HIGH);
+   \   00000002   0xF44F 0x5180      MOV      R1,#+4096
+   \   00000006   0x....             LDR.N    R0,??DataTable6  ;; 0x40010c00
+   \   00000008   0x.... 0x....      BL       GPIO_ResetBits
+     60              GPIO_ResetBits(GPIOB, LEFT_LOW);
+   \   0000000C   0xF44F 0x5100      MOV      R1,#+8192
+   \   00000010   0x....             LDR.N    R0,??DataTable6  ;; 0x40010c00
+   \   00000012   0x.... 0x....      BL       GPIO_ResetBits
+     61              GPIO_SetBits(GPIOA, RIGHT_HIGH);
+   \   00000016   0x2110             MOVS     R1,#+16
+   \   00000018   0x....             LDR.N    R0,??DataTable6_1  ;; 0x40010800
+   \   0000001A   0x.... 0x....      BL       GPIO_SetBits
+     62              GPIO_ResetBits(GPIOA, RIGHT_LOW);
+   \   0000001E   0x2120             MOVS     R1,#+32
+   \   00000020   0x....             LDR.N    R0,??DataTable6_1  ;; 0x40010800
+   \   00000022   0x.... 0x....      BL       GPIO_ResetBits
+     63          }
+   \   00000026   0xBD01             POP      {R0,PC}          ;; return
+     64          
+
+   \                                 In section .text, align 2, keep-with-next
+     65          void stopAllWheel(void) {
+   \                     stopAllWheel: (+1)
+   \   00000000   0xB580             PUSH     {R7,LR}
+     66              GPIO_ResetBits(GPIOB, LEFT_HIGH);
+   \   00000002   0xF44F 0x5180      MOV      R1,#+4096
+   \   00000006   0x....             LDR.N    R0,??DataTable6  ;; 0x40010c00
+   \   00000008   0x.... 0x....      BL       GPIO_ResetBits
+     67              GPIO_ResetBits(GPIOB, LEFT_LOW);
+   \   0000000C   0xF44F 0x5100      MOV      R1,#+8192
+   \   00000010   0x....             LDR.N    R0,??DataTable6  ;; 0x40010c00
+   \   00000012   0x.... 0x....      BL       GPIO_ResetBits
+     68              GPIO_ResetBits(GPIOA, RIGHT_HIGH);
+   \   00000016   0x2110             MOVS     R1,#+16
+   \   00000018   0x....             LDR.N    R0,??DataTable6_1  ;; 0x40010800
+   \   0000001A   0x.... 0x....      BL       GPIO_ResetBits
+     69              GPIO_ResetBits(GPIOA, RIGHT_LOW);
+   \   0000001E   0x2120             MOVS     R1,#+32
+   \   00000020   0x....             LDR.N    R0,??DataTable6_1  ;; 0x40010800
+   \   00000022   0x.... 0x....      BL       GPIO_ResetBits
+     70          }
+   \   00000026   0xBD01             POP      {R0,PC}          ;; return
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable6:
+   \   00000000   0x40010C00         DC32     0x40010c00
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable6_1:
+   \   00000000   0x40010800         DC32     0x40010800
+     71          
+     72          
+     73          
+
+   Maximum stack usage in bytes:
+
+   .cstack Function
+   ------- --------
+       8   GPIO_Configure_wheel
+         8   -> GPIO_Init
+       8   RCC_Configure_wheel_pin
+         8   -> RCC_APB2PeriphClockCmd
+       8   setDirectionToBack
+         8   -> GPIO_ResetBits
+         8   -> GPIO_SetBits
+       8   setDirectionToFront
+         8   -> GPIO_ResetBits
+         8   -> GPIO_SetBits
+       8   stopAllWheel
+         8   -> GPIO_ResetBits
+       8   turnToLeft
+         8   -> GPIO_ResetBits
+         8   -> GPIO_SetBits
+       8   turnToRight
+         8   -> GPIO_ResetBits
+         8   -> GPIO_SetBits
+
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       4  ??DataTable6
+       4  ??DataTable6_1
+      58  GPIO_Configure_wheel
+      20  RCC_Configure_wheel_pin
+      40  setDirectionToBack
+      40  setDirectionToFront
+      40  stopAllWheel
+      40  turnToLeft
+      40  turnToRight
+
+ 
+ 286 bytes in section .text
+ 
+ 286 bytes of CODE memory
+
+Errors: none
+Warnings: none

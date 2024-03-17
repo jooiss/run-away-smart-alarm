@@ -1,0 +1,124 @@
+###############################################################################
+#
+# IAR ANSI C/C++ Compiler V8.22.1.15669/W32 for ARM       08/Dec/2023  15:37:30
+# Copyright 1999-2018 IAR Systems AB.
+#
+#    Cpu mode     =  thumb
+#    Endian       =  little
+#    Source file  =  C:\Users\user\Documents\Term_project\user\stop_button.c
+#    Command line =  
+#        -f C:\Users\user\AppData\Local\Temp\EWE2AD.tmp
+#        (C:\Users\user\Documents\Term_project\user\stop_button.c -D
+#        USE_STDPERIPH_DRIVER -D STM32F10X_CL -lC
+#        C:\Users\user\Documents\Term_project\Debug\List -o
+#        C:\Users\user\Documents\Term_project\Debug\Obj --no_cse --no_unroll
+#        --no_inline --no_code_motion --no_tbaa --no_clustering --no_scheduling
+#        --debug --endian=little --cpu=Cortex-M3 -e --fpu=None --dlib_config
+#        "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        8.0\arm\INC\c\DLib_Config_Normal.h" -I
+#        C:\Users\user\Documents\Term_project\Libraries\CMSIS\DeviceSupport\ -I
+#        C:\Users\user\Documents\Term_project\Libraries\CMSIS\DeviceSupport\Startup\
+#        -I
+#        C:\Users\user\Documents\Term_project\Libraries\STM32F10x_StdPeriph_Driver_v3.5\inc\
+#        -I
+#        C:\Users\user\Documents\Term_project\Libraries\STM32F10x_StdPeriph_Driver_v3.5\src\
+#        -I C:\Users\user\Documents\Term_project\user\inc\ -I
+#        C:\Users\user\Documents\Term_project\user\ -I
+#        C:\Users\user\Documents\Term_project\Libraries\LCD\ -Ol -I "C:\Program
+#        Files (x86)\IAR Systems\Embedded Workbench
+#        8.0\arm\CMSIS\Core\Include\" -I "C:\Program Files (x86)\IAR
+#        Systems\Embedded Workbench 8.0\arm\CMSIS\DSP\Include\")
+#    Locale       =  C
+#    List file    =  
+#        C:\Users\user\Documents\Term_project\Debug\List\stop_button.lst
+#    Object file  =  
+#        C:\Users\user\Documents\Term_project\Debug\Obj\stop_button.o
+#
+###############################################################################
+
+C:\Users\user\Documents\Term_project\user\stop_button.c
+      1          #include "stop_button.h"
+      2          #include "stm32f10x.h"
+      3          #include "stm32f10x_rcc.h"
+      4          #include "stm32f10x_gpio.h"
+      5          
+
+   \                                 In section .text, align 2, keep-with-next
+      6          void RCC_BUTTON(void)
+      7          {
+   \                     RCC_BUTTON: (+1)
+   \   00000000   0xB580             PUSH     {R7,LR}
+      8            RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC,ENABLE);  // RCC GPIO D
+   \   00000002   0x2101             MOVS     R1,#+1
+   \   00000004   0x2010             MOVS     R0,#+16
+   \   00000006   0x.... 0x....      BL       RCC_APB2PeriphClockCmd
+      9          }
+   \   0000000A   0xBD01             POP      {R0,PC}          ;; return
+     10          
+
+   \                                 In section .text, align 2, keep-with-next
+     11          void GPIO_BUTTON(void)
+     12          {
+   \                     GPIO_BUTTON: (+1)
+   \   00000000   0xB580             PUSH     {R7,LR}
+     13            GPIO_InitTypeDef GPIO_InitStructure;
+     14            
+     15            GPIO_InitStructure.GPIO_Pin = BUTTON_PIN;
+   \   00000002   0x2010             MOVS     R0,#+16
+   \   00000004   0xF8AD 0x0000      STRH     R0,[SP, #+0]
+     16            GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPD;
+   \   00000008   0x2028             MOVS     R0,#+40
+   \   0000000A   0xF88D 0x0003      STRB     R0,[SP, #+3]
+     17            GPIO_Init(BUTTON_PORT, &GPIO_InitStructure);
+   \   0000000E   0x4669             MOV      R1,SP
+   \   00000010   0x....             LDR.N    R0,??DataTable1  ;; 0x40011000
+   \   00000012   0x.... 0x....      BL       GPIO_Init
+     18          }
+   \   00000016   0xBD01             POP      {R0,PC}          ;; return
+     19          
+
+   \                                 In section .text, align 2, keep-with-next
+     20          void Init_BUTTON(void) {
+   \                     Init_BUTTON: (+1)
+   \   00000000   0xB580             PUSH     {R7,LR}
+     21              RCC_BUTTON();
+   \   00000002   0x.... 0x....      BL       RCC_BUTTON
+     22              GPIO_BUTTON();
+   \   00000006   0x.... 0x....      BL       GPIO_BUTTON
+     23          }
+   \   0000000A   0xBD01             POP      {R0,PC}          ;; return
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable1:
+   \   00000000   0x40011000         DC32     0x40011000
+     24          
+
+   Maximum stack usage in bytes:
+
+   .cstack Function
+   ------- --------
+       8   GPIO_BUTTON
+         8   -> GPIO_Init
+       8   Init_BUTTON
+         8   -> GPIO_BUTTON
+         8   -> RCC_BUTTON
+       8   RCC_BUTTON
+         8   -> RCC_APB2PeriphClockCmd
+
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       4  ??DataTable1
+      24  GPIO_BUTTON
+      12  Init_BUTTON
+      12  RCC_BUTTON
+
+ 
+ 52 bytes in section .text
+ 
+ 52 bytes of CODE memory
+
+Errors: none
+Warnings: none

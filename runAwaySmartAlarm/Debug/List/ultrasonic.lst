@@ -1,0 +1,482 @@
+###############################################################################
+#
+# IAR ANSI C/C++ Compiler V8.22.1.15669/W32 for ARM       08/Dec/2023  17:02:39
+# Copyright 1999-2018 IAR Systems AB.
+#
+#    Cpu mode     =  thumb
+#    Endian       =  little
+#    Source file  =  C:\Users\user\Documents\Term_project\user\ultrasonic.c
+#    Command line =  
+#        -f C:\Users\user\AppData\Local\Temp\EWE400.tmp
+#        (C:\Users\user\Documents\Term_project\user\ultrasonic.c -D
+#        USE_STDPERIPH_DRIVER -D STM32F10X_CL -lC
+#        C:\Users\user\Documents\Term_project\Debug\List -o
+#        C:\Users\user\Documents\Term_project\Debug\Obj --no_cse --no_unroll
+#        --no_inline --no_code_motion --no_tbaa --no_clustering --no_scheduling
+#        --debug --endian=little --cpu=Cortex-M3 -e --fpu=None --dlib_config
+#        "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        8.0\arm\INC\c\DLib_Config_Normal.h" -I
+#        C:\Users\user\Documents\Term_project\Libraries\CMSIS\DeviceSupport\ -I
+#        C:\Users\user\Documents\Term_project\Libraries\CMSIS\DeviceSupport\Startup\
+#        -I
+#        C:\Users\user\Documents\Term_project\Libraries\STM32F10x_StdPeriph_Driver_v3.5\inc\
+#        -I
+#        C:\Users\user\Documents\Term_project\Libraries\STM32F10x_StdPeriph_Driver_v3.5\src\
+#        -I C:\Users\user\Documents\Term_project\user\inc\ -I
+#        C:\Users\user\Documents\Term_project\user\ -I
+#        C:\Users\user\Documents\Term_project\Libraries\LCD\ -Ol -I "C:\Program
+#        Files (x86)\IAR Systems\Embedded Workbench
+#        8.0\arm\CMSIS\Core\Include\" -I "C:\Program Files (x86)\IAR
+#        Systems\Embedded Workbench 8.0\arm\CMSIS\DSP\Include\")
+#    Locale       =  C
+#    List file    =  
+#        C:\Users\user\Documents\Term_project\Debug\List\ultrasonic.lst
+#    Object file  =  
+#        C:\Users\user\Documents\Term_project\Debug\Obj\ultrasonic.o
+#
+###############################################################################
+
+C:\Users\user\Documents\Term_project\user\ultrasonic.c
+      1          #include "ultrasonic.h"
+      2          #include "stm32f10x.h"
+      3          #include "stm32f10x_rcc.h"
+      4          #include "stm32f10x_gpio.h"
+      5          
+      6          /**
+      7           *   How to use this driver:
+      8           *    1. Implement EnableHCSR04PeriphClock function and turn on clock for used peripherals
+      9           *       ex:
+     10           *       void EnableHCSR04PeriphClock() {
+     11           *         RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);
+     12           *         RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);
+     13           *         RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3, ENABLE);
+     14           *      }
+     15           *   2. Call InitHCSR04();
+     16           *   3. Get distance (in mm) using HCSR04GetDistance function.
+     17           *      Value lower than zero means no echo received (distance >3m)
+     18           *      Measuring takes about 65ms
+     19           *
+     20           *   If necessary, change defines above, but be careful, US_ECHO_PIN must be tim ch1
+     21           *   and US_TRIG_PIN must be ch3 or ch4. In case of ch4 change TIM_OC3Init into TIM_OC4Init in stm32f10x_HC-SR04.c file
+     22           */
+     23          
+     24          
+     25          
+     26          /**
+     27           * Implement this function. See instruction at the top of this file.
+     28           */
+     29          
+
+   \                                 In section .text, align 2, keep-with-next
+     30          void EnableHCSR04PeriphClock() {
+   \                     EnableHCSR04PeriphClock: (+1)
+   \   00000000   0xB580             PUSH     {R7,LR}
+     31              RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);
+   \   00000002   0x2101             MOVS     R1,#+1
+   \   00000004   0x2004             MOVS     R0,#+4
+   \   00000006   0x.... 0x....      BL       RCC_APB2PeriphClockCmd
+     32              RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);
+   \   0000000A   0x2101             MOVS     R1,#+1
+   \   0000000C   0x2008             MOVS     R0,#+8
+   \   0000000E   0x.... 0x....      BL       RCC_APB2PeriphClockCmd
+     33              RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3, ENABLE);
+   \   00000012   0x2101             MOVS     R1,#+1
+   \   00000014   0x2002             MOVS     R0,#+2
+   \   00000016   0x.... 0x....      BL       RCC_APB1PeriphClockCmd
+     34              
+     35              //updata
+     36              RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM5, ENABLE);
+   \   0000001A   0x2101             MOVS     R1,#+1
+   \   0000001C   0x2008             MOVS     R0,#+8
+   \   0000001E   0x.... 0x....      BL       RCC_APB1PeriphClockCmd
+     37              RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);
+   \   00000022   0x2101             MOVS     R1,#+1
+   \   00000024   0x2001             MOVS     R0,#+1
+   \   00000026   0x.... 0x....      BL       RCC_APB1PeriphClockCmd
+     38            }
+   \   0000002A   0xBD01             POP      {R0,PC}          ;; return
+     39          
+     40          /**
+     41           * Initialization of HCSR04's peripherals
+     42           */
+     43          
+     44          
+     45          /**
+     46           * Measure distance and get value in mm. Lower than 0 means no echo signal: distance more than ~3m.
+     47           */
+     48          
+     49          
+     50          
+     51          static void initMeasureTimer() {
+                             ^
+Warning[Pe177]: function "initMeasureTimer" was declared but never referenced
+     52             RCC_ClocksTypeDef RCC_ClocksStatus;
+     53             RCC_GetClocksFreq(&RCC_ClocksStatus);
+     54             uint16_t prescaler = RCC_ClocksStatus.SYSCLK_Frequency / 1000000 - 1; //1 tick = 1us (1 tick = 0.165mm resolution)
+     55          
+     56             TIM_DeInit(US_TIMER);
+     57             TIM_TimeBaseInitTypeDef TIM_TimeBaseInitStruct;
+     58             TIM_TimeBaseInitStruct.TIM_Prescaler = prescaler;
+     59             TIM_TimeBaseInitStruct.TIM_CounterMode = TIM_CounterMode_Up;
+     60             TIM_TimeBaseInitStruct.TIM_Period = 0xFFFF;
+     61             TIM_TimeBaseInitStruct.TIM_ClockDivision = TIM_CKD_DIV1;
+     62             TIM_TimeBaseInit(US_TIMER, &TIM_TimeBaseInitStruct);
+     63          
+     64             TIM_OCInitTypeDef TIM_OCInitStruct;
+     65             TIM_OCStructInit(&TIM_OCInitStruct);
+     66             TIM_OCInitStruct.TIM_OCMode = TIM_OCMode_PWM1;
+     67             TIM_OCInitStruct.TIM_OutputState = TIM_OutputState_Enable;
+     68             TIM_OCInitStruct.TIM_Pulse = 15; //us
+     69             TIM_OCInitStruct.TIM_OCPolarity = TIM_OCPolarity_High;
+     70             TIM_OC3Init(US_TIMER, &TIM_OCInitStruct);
+     71          
+     72             TIM_ICInitTypeDef TIM_ICInitStruct;
+     73             TIM_ICInitStruct.TIM_Channel = TIM_Channel_1;
+     74             TIM_ICInitStruct.TIM_ICPolarity = TIM_ICPolarity_Rising;
+     75             TIM_ICInitStruct.TIM_ICSelection = TIM_ICSelection_DirectTI;
+     76             TIM_ICInitStruct.TIM_ICPrescaler = TIM_ICPSC_DIV1;
+     77             TIM_ICInitStruct.TIM_ICFilter = 0;
+     78          
+     79             TIM_PWMIConfig(US_TIMER, &TIM_ICInitStruct);
+     80             TIM_SelectInputTrigger(US_TIMER, US_TIMER_TRIG_SOURCE);
+     81             TIM_SelectMasterSlaveMode(US_TIMER, TIM_MasterSlaveMode_Enable);
+     82          
+     83             TIM_CtrlPWMOutputs(US_TIMER, ENABLE);
+     84          
+     85             TIM_ClearFlag(US_TIMER, TIM_FLAG_Update);
+     86          }
+     87          
+     88          //update
+     89          static void initMeasureTimer2() {
+                             ^
+Warning[Pe177]: function "initMeasureTimer2" was declared but never referenced
+     90             RCC_ClocksTypeDef RCC_ClocksStatus;
+     91             RCC_GetClocksFreq(&RCC_ClocksStatus);
+     92             uint16_t prescaler = RCC_ClocksStatus.SYSCLK_Frequency / 1000000 - 1; //1 tick = 1us (1 tick = 0.165mm resolution)
+     93          
+     94             TIM_DeInit(TIM5);
+     95             TIM_TimeBaseInitTypeDef TIM_TimeBaseInitStruct;
+     96             TIM_TimeBaseInitStruct.TIM_Prescaler = prescaler;
+     97             TIM_TimeBaseInitStruct.TIM_CounterMode = TIM_CounterMode_Up;
+     98             TIM_TimeBaseInitStruct.TIM_Period = 0xFFFF;
+     99             TIM_TimeBaseInitStruct.TIM_ClockDivision = TIM_CKD_DIV1;
+    100             TIM_TimeBaseInit(TIM5, &TIM_TimeBaseInitStruct);
+    101          
+    102             TIM_OCInitTypeDef TIM_OCInitStruct;
+    103             TIM_OCStructInit(&TIM_OCInitStruct);
+    104             TIM_OCInitStruct.TIM_OCMode = TIM_OCMode_PWM1;
+    105             TIM_OCInitStruct.TIM_OutputState = TIM_OutputState_Enable;
+    106             TIM_OCInitStruct.TIM_Pulse = 15; //us
+    107             TIM_OCInitStruct.TIM_OCPolarity = TIM_OCPolarity_High;
+    108             TIM_OC3Init(TIM5, &TIM_OCInitStruct);
+    109          
+    110             //input capture config
+    111             TIM_ICInitTypeDef TIM_ICInitStruct;
+    112             TIM_ICInitStruct.TIM_Channel = TIM_Channel_1;
+    113             TIM_ICInitStruct.TIM_ICPolarity = TIM_ICPolarity_Rising;
+    114             TIM_ICInitStruct.TIM_ICSelection = TIM_ICSelection_DirectTI;
+    115             TIM_ICInitStruct.TIM_ICPrescaler = TIM_ICPSC_DIV1;
+    116             TIM_ICInitStruct.TIM_ICFilter = 0;
+    117          
+    118             TIM_PWMIConfig(TIM5, &TIM_ICInitStruct);
+    119             TIM_SelectInputTrigger(TIM5, inputTriger_updated);
+    120             TIM_SelectMasterSlaveMode(TIM5, TIM_MasterSlaveMode_Enable);
+    121          
+    122             TIM_CtrlPWMOutputs(TIM5, ENABLE);
+    123          
+    124             TIM_ClearFlag(TIM5, TIM_FLAG_Update);
+    125          }
+    126          
+    127          //------------------------------ have to change below
+
+   \                                 In section .text, align 2, keep-with-next
+    128          static void initMeasureTimer3() {
+   \                     initMeasureTimer3: (+1)
+   \   00000000   0xB518             PUSH     {R3,R4,LR}
+   \   00000002   0xB08F             SUB      SP,SP,#+60
+    129             RCC_ClocksTypeDef RCC_ClocksStatus;
+    130             RCC_GetClocksFreq(&RCC_ClocksStatus);
+   \   00000004   0xA80A             ADD      R0,SP,#+40
+   \   00000006   0x.... 0x....      BL       RCC_GetClocksFreq
+    131             uint16_t prescaler = RCC_ClocksStatus.SYSCLK_Frequency / 1000000 - 1; //1 tick = 1us (1 tick = 0.165mm resolution)
+   \   0000000A   0x980A             LDR      R0,[SP, #+40]
+   \   0000000C   0x....             LDR.N    R1,??DataTable4  ;; 0xf4240
+   \   0000000E   0xFBB0 0xF0F1      UDIV     R0,R0,R1
+   \   00000012   0x1E44             SUBS     R4,R0,#+1
+    132          
+    133             TIM_DeInit(TIM2);
+   \   00000014   0xF05F 0x4080      MOVS     R0,#+1073741824
+   \   00000018   0x.... 0x....      BL       TIM_DeInit
+    134             TIM_TimeBaseInitTypeDef TIM_TimeBaseInitStruct;
+    135             TIM_TimeBaseInitStruct.TIM_Prescaler = prescaler;
+   \   0000001C   0xF8AD 0x400C      STRH     R4,[SP, #+12]
+    136             TIM_TimeBaseInitStruct.TIM_CounterMode = TIM_CounterMode_Up;
+   \   00000020   0x2000             MOVS     R0,#+0
+   \   00000022   0xF8AD 0x000E      STRH     R0,[SP, #+14]
+    137             TIM_TimeBaseInitStruct.TIM_Period = 0xFFFF;
+   \   00000026   0xF64F 0x70FF      MOVW     R0,#+65535
+   \   0000002A   0xF8AD 0x0010      STRH     R0,[SP, #+16]
+    138             TIM_TimeBaseInitStruct.TIM_ClockDivision = TIM_CKD_DIV1;
+   \   0000002E   0x2000             MOVS     R0,#+0
+   \   00000030   0xF8AD 0x0012      STRH     R0,[SP, #+18]
+    139             TIM_TimeBaseInit(TIM2, &TIM_TimeBaseInitStruct);
+   \   00000034   0xA903             ADD      R1,SP,#+12
+   \   00000036   0xF05F 0x4080      MOVS     R0,#+1073741824
+   \   0000003A   0x.... 0x....      BL       TIM_TimeBaseInit
+    140          
+    141             TIM_OCInitTypeDef TIM_OCInitStruct;
+    142             TIM_OCStructInit(&TIM_OCInitStruct);
+   \   0000003E   0xA806             ADD      R0,SP,#+24
+   \   00000040   0x.... 0x....      BL       TIM_OCStructInit
+    143             TIM_OCInitStruct.TIM_OCMode = TIM_OCMode_PWM1;
+   \   00000044   0x2060             MOVS     R0,#+96
+   \   00000046   0xF8AD 0x0018      STRH     R0,[SP, #+24]
+    144             TIM_OCInitStruct.TIM_OutputState = TIM_OutputState_Enable;
+   \   0000004A   0x2001             MOVS     R0,#+1
+   \   0000004C   0xF8AD 0x001A      STRH     R0,[SP, #+26]
+    145             TIM_OCInitStruct.TIM_Pulse = 15; //us
+   \   00000050   0x200F             MOVS     R0,#+15
+   \   00000052   0xF8AD 0x001E      STRH     R0,[SP, #+30]
+    146             TIM_OCInitStruct.TIM_OCPolarity = TIM_OCPolarity_High;
+   \   00000056   0x2000             MOVS     R0,#+0
+   \   00000058   0xF8AD 0x0020      STRH     R0,[SP, #+32]
+    147             TIM_OC4Init(TIM2, &TIM_OCInitStruct);//using channel 4 (trig)
+   \   0000005C   0xA906             ADD      R1,SP,#+24
+   \   0000005E   0xF05F 0x4080      MOVS     R0,#+1073741824
+   \   00000062   0x.... 0x....      BL       TIM_OC4Init
+    148          
+    149                //input capture config
+    150             TIM_ICInitTypeDef TIM_ICInitStruct;
+    151             TIM_ICInitStruct.TIM_Channel = TIM_Channel_2;
+   \   00000066   0x2004             MOVS     R0,#+4
+   \   00000068   0xF8AD 0x0000      STRH     R0,[SP, #+0]
+    152             TIM_ICInitStruct.TIM_ICPolarity = TIM_ICPolarity_Falling;
+   \   0000006C   0x2002             MOVS     R0,#+2
+   \   0000006E   0xF8AD 0x0002      STRH     R0,[SP, #+2]
+    153             TIM_ICInitStruct.TIM_ICSelection = TIM_ICSelection_DirectTI;
+   \   00000072   0x2001             MOVS     R0,#+1
+   \   00000074   0xF8AD 0x0004      STRH     R0,[SP, #+4]
+    154             TIM_ICInitStruct.TIM_ICPrescaler = TIM_ICPSC_DIV1;
+   \   00000078   0x2000             MOVS     R0,#+0
+   \   0000007A   0xF8AD 0x0006      STRH     R0,[SP, #+6]
+    155             TIM_ICInitStruct.TIM_ICFilter = 0;
+   \   0000007E   0x2000             MOVS     R0,#+0
+   \   00000080   0xF8AD 0x0008      STRH     R0,[SP, #+8]
+    156          
+    157             TIM_PWMIConfig(TIM2, &TIM_ICInitStruct);
+   \   00000084   0x4669             MOV      R1,SP
+   \   00000086   0xF05F 0x4080      MOVS     R0,#+1073741824
+   \   0000008A   0x.... 0x....      BL       TIM_PWMIConfig
+    158             TIM_SelectInputTrigger(TIM2, TIM_TS_TI2FP2);
+   \   0000008E   0x2160             MOVS     R1,#+96
+   \   00000090   0xF05F 0x4080      MOVS     R0,#+1073741824
+   \   00000094   0x.... 0x....      BL       TIM_SelectInputTrigger
+    159             TIM_SelectMasterSlaveMode(TIM2, TIM_MasterSlaveMode_Enable);
+   \   00000098   0x2180             MOVS     R1,#+128
+   \   0000009A   0xF05F 0x4080      MOVS     R0,#+1073741824
+   \   0000009E   0x.... 0x....      BL       TIM_SelectMasterSlaveMode
+    160          
+    161             TIM_CtrlPWMOutputs(TIM2, ENABLE);
+   \   000000A2   0x2101             MOVS     R1,#+1
+   \   000000A4   0xF05F 0x4080      MOVS     R0,#+1073741824
+   \   000000A8   0x.... 0x....      BL       TIM_CtrlPWMOutputs
+    162          
+    163             TIM_ClearFlag(TIM2, TIM_FLAG_Update);
+   \   000000AC   0x2101             MOVS     R1,#+1
+   \   000000AE   0xF05F 0x4080      MOVS     R0,#+1073741824
+   \   000000B2   0x.... 0x....      BL       TIM_ClearFlag
+    164          }
+   \   000000B6   0xB010             ADD      SP,SP,#+64
+   \   000000B8   0xBD10             POP      {R4,PC}          ;; return
+    165          //end of update
+    166          
+
+   \                                 In section .text, align 2, keep-with-next
+    167          static void initPins() {
+   \                     initPins: (+1)
+   \   00000000   0xB580             PUSH     {R7,LR}
+    168             GPIO_InitTypeDef GPIO_InitStructure;
+    169          
+    170             GPIO_InitStructure.GPIO_Pin = US_TRIG_PIN3;
+   \   00000002   0x2008             MOVS     R0,#+8
+   \   00000004   0xF8AD 0x0000      STRH     R0,[SP, #+0]
+    171             GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+   \   00000008   0x2003             MOVS     R0,#+3
+   \   0000000A   0xF88D 0x0002      STRB     R0,[SP, #+2]
+    172             GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
+   \   0000000E   0x2018             MOVS     R0,#+24
+   \   00000010   0xF88D 0x0003      STRB     R0,[SP, #+3]
+    173             GPIO_Init(GPIOA, &GPIO_InitStructure); //PA3
+   \   00000014   0x4669             MOV      R1,SP
+   \   00000016   0x....             LDR.N    R0,??DataTable4_1  ;; 0x40010800
+   \   00000018   0x.... 0x....      BL       GPIO_Init
+    174             
+    175             GPIO_InitStructure.GPIO_Pin = US_ECHO_PIN3;
+   \   0000001C   0x2002             MOVS     R0,#+2
+   \   0000001E   0xF8AD 0x0000      STRH     R0,[SP, #+0]
+    176             GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+   \   00000022   0x2003             MOVS     R0,#+3
+   \   00000024   0xF88D 0x0002      STRB     R0,[SP, #+2]
+    177             GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
+   \   00000028   0x2004             MOVS     R0,#+4
+   \   0000002A   0xF88D 0x0003      STRB     R0,[SP, #+3]
+    178             GPIO_Init(GPIOA, &GPIO_InitStructure); //PA1
+   \   0000002E   0x4669             MOV      R1,SP
+   \   00000030   0x....             LDR.N    R0,??DataTable4_1  ;; 0x40010800
+   \   00000032   0x.... 0x....      BL       GPIO_Init
+    179          }
+   \   00000036   0xBD01             POP      {R0,PC}          ;; return
+    180          
+
+   \                                 In section .text, align 2, keep-with-next
+    181          void InitHCSR04() {
+   \                     InitHCSR04: (+1)
+   \   00000000   0xB580             PUSH     {R7,LR}
+    182             EnableHCSR04PeriphClock();
+   \   00000002   0x.... 0x....      BL       EnableHCSR04PeriphClock
+    183             initPins();
+   \   00000006   0x.... 0x....      BL       initPins
+    184             initMeasureTimer3();
+   \   0000000A   0x.... 0x....      BL       initMeasureTimer3
+    185          }
+   \   0000000E   0xBD01             POP      {R0,PC}          ;; return
+    186          
+
+   \                                 In section .bss, align 4
+    187          int cnt;
+   \                     cnt:
+   \   00000000                      DS8 4
+    188          
+
+   \                                 In section .text, align 2, keep-with-next
+    189          int32_t HCSR04GetDistance3() {
+   \                     HCSR04GetDistance3: (+1)
+   \   00000000   0xB510             PUSH     {R4,LR}
+    190             (TIM2)->CNT = 0;
+   \   00000002   0x2000             MOVS     R0,#+0
+   \   00000004   0x....             LDR.N    R1,??DataTable4_2  ;; 0x40000024
+   \   00000006   0x8008             STRH     R0,[R1, #+0]
+    191             cnt++;
+   \   00000008   0x....             LDR.N    R0,??DataTable4_3
+   \   0000000A   0x6800             LDR      R0,[R0, #+0]
+   \   0000000C   0x1C40             ADDS     R0,R0,#+1
+   \   0000000E   0x....             LDR.N    R1,??DataTable4_3
+   \   00000010   0x6008             STR      R0,[R1, #+0]
+    192             TIM_Cmd(TIM2, ENABLE);
+   \   00000012   0x2101             MOVS     R1,#+1
+   \   00000014   0xF05F 0x4080      MOVS     R0,#+1073741824
+   \   00000018   0x.... 0x....      BL       TIM_Cmd
+    193             while(!TIM_GetFlagStatus(TIM2, TIM_FLAG_CC2));
+   \                     ??HCSR04GetDistance3_0: (+1)
+   \   0000001C   0x2104             MOVS     R1,#+4
+   \   0000001E   0xF05F 0x4080      MOVS     R0,#+1073741824
+   \   00000022   0x.... 0x....      BL       TIM_GetFlagStatus
+   \   00000026   0x2800             CMP      R0,#+0
+   \   00000028   0xD0F8             BEQ.N    ??HCSR04GetDistance3_0
+    194             TIM_Cmd(TIM2, DISABLE);
+   \   0000002A   0x2100             MOVS     R1,#+0
+   \   0000002C   0xF05F 0x4080      MOVS     R0,#+1073741824
+   \   00000030   0x.... 0x....      BL       TIM_Cmd
+    195             TIM_ClearFlag(TIM2, TIM_FLAG_CC2);
+   \   00000034   0x2104             MOVS     R1,#+4
+   \   00000036   0xF05F 0x4080      MOVS     R0,#+1073741824
+   \   0000003A   0x.... 0x....      BL       TIM_ClearFlag
+    196             return ((TIM_GetCapture2(TIM2))-(TIM_GetCapture1(TIM2)))*165/1000;
+   \   0000003E   0xF05F 0x4080      MOVS     R0,#+1073741824
+   \   00000042   0x.... 0x....      BL       TIM_GetCapture2
+   \   00000046   0x0004             MOVS     R4,R0
+   \   00000048   0xB2A4             UXTH     R4,R4            ;; ZeroExt  R4,R4,#+16,#+16
+   \   0000004A   0xF05F 0x4080      MOVS     R0,#+1073741824
+   \   0000004E   0x.... 0x....      BL       TIM_GetCapture1
+   \   00000052   0x1A24             SUBS     R4,R4,R0
+   \   00000054   0x20A5             MOVS     R0,#+165
+   \   00000056   0x4344             MULS     R4,R0,R4
+   \   00000058   0xF44F 0x707A      MOV      R0,#+1000
+   \   0000005C   0xFB94 0xF0F0      SDIV     R0,R4,R0
+   \   00000060   0xBD10             POP      {R4,PC}          ;; return
+    197          }
+    198          
+
+   \                                 In section .text, align 2, keep-with-next
+    199          int delayByTim2(){
+    200            return cnt;
+   \                     delayByTim2: (+1)
+   \   00000000   0x....             LDR.N    R0,??DataTable4_3
+   \   00000002   0x6800             LDR      R0,[R0, #+0]
+   \   00000004   0x4770             BX       LR               ;; return
+    201          }
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable4:
+   \   00000000   0x000F4240         DC32     0xf4240
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable4_1:
+   \   00000000   0x40010800         DC32     0x40010800
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable4_2:
+   \   00000000   0x40000024         DC32     0x40000024
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable4_3:
+   \   00000000   0x........         DC32     cnt
+
+   Maximum stack usage in bytes:
+
+   .cstack Function
+   ------- --------
+       8   EnableHCSR04PeriphClock
+         8   -> RCC_APB1PeriphClockCmd
+         8   -> RCC_APB2PeriphClockCmd
+       8   HCSR04GetDistance3
+         8   -> TIM_ClearFlag
+         8   -> TIM_Cmd
+         8   -> TIM_GetCapture1
+         8   -> TIM_GetCapture2
+         8   -> TIM_GetFlagStatus
+       8   InitHCSR04
+         8   -> EnableHCSR04PeriphClock
+         8   -> initMeasureTimer3
+         8   -> initPins
+       0   delayByTim2
+      72   initMeasureTimer3
+        72   -> RCC_GetClocksFreq
+        72   -> TIM_ClearFlag
+        72   -> TIM_CtrlPWMOutputs
+        72   -> TIM_DeInit
+        72   -> TIM_OC4Init
+        72   -> TIM_OCStructInit
+        72   -> TIM_PWMIConfig
+        72   -> TIM_SelectInputTrigger
+        72   -> TIM_SelectMasterSlaveMode
+        72   -> TIM_TimeBaseInit
+       8   initPins
+         8   -> GPIO_Init
+
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       4  ??DataTable4
+       4  ??DataTable4_1
+       4  ??DataTable4_2
+       4  ??DataTable4_3
+      44  EnableHCSR04PeriphClock
+      98  HCSR04GetDistance3
+      16  InitHCSR04
+       4  cnt
+       6  delayByTim2
+     186  initMeasureTimer3
+      56  initPins
+
+ 
+   4 bytes in section .bss
+ 422 bytes in section .text
+ 
+ 422 bytes of CODE memory
+   4 bytes of DATA memory
+
+Errors: none
+Warnings: 2
